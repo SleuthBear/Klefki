@@ -11,13 +11,12 @@ void hotkey2() {
 KeyCodes keyCodes[2] = {
     {
         hotkey1,
-        {KEY_A, KEY_S, NULL_KEY, NULL_KEY, NULL_KEY},
+        {(1 << KEY_A) | (1 << KEY_S), 0},
    (kCGEventFlagMaskShift)
     },
     {
         hotkey2,
-    {KEY_A, KEY_D, NULL_KEY, NULL_KEY, NULL_KEY},
+        {(1 << KEY_A) | (1 << KEY_D), 0},
    (kCGEventFlagMaskShift)
     }
-
 };

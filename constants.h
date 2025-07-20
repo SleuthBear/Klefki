@@ -4,20 +4,22 @@
 #include <CoreFoundation/CoreFoundation.h>
 
 #define RING_SIZE 5
-#define NULL_KEY 127
-
+#define MASK_SIZE 2
 
 typedef struct {
-    int keyBuf[RING_SIZE];
+    long long keyMask[MASK_SIZE];
     CGEventFlags flags;
     int count;
 } KeyRing;
 
 typedef struct {
     void (*func)(void);
-    int code[RING_SIZE];
+    long long codeMask[MASK_SIZE];
     CGEventFlags flags;
 } KeyCodes;
+
+
+
 
 // Keycode definitions
 #define KEY_A 0
