@@ -7,19 +7,15 @@ extern KeyCodes keyCodes[2];
 long long* mask(long long mask[MASK_SIZE], int code) {
     int section = code / (sizeof(long long) * 8);
     int position = code % (sizeof(long long) * 8);
-    mask[section] = mask[section] | (1 << position);
+    mask[section] = mask[section] | ((long long)1 << position);
     return mask;
 }
 
 long long* unmask(long long mask[MASK_SIZE], int code) {
     int section = code / (sizeof(long long) * 8);
     int position = code % (sizeof(long long) * 8);
-    mask[section] = mask[section] & ~(1 << position);
+    mask[section] = mask[section] & ~((long long)1 << position);
     return mask;
-}
-
-int comp(const void *a, const void *b) {
-    return (*(int *)a) - (*(int *)b);
 }
 
 bool maskMatch(long long keyMask[MASK_SIZE], long long codeMask[MASK_SIZE]) {
@@ -49,7 +45,10 @@ CGEventRef eventCallback(CGEventTapProxy proxy, CGEventType type, CGEventRef eve
     KeyRing *keyRing = (KeyRing*)refcon;
     if (type == kCGEventKeyDown) {
         CGKeyCode keyCode = (CGKeyCode)CGEventGetIntegerValueField(event, kCGKeyboardEventKeycode);
-        // set the bit
+        // safety valve for value that we can't mask.
+        if (keyCode > 126) {
+            return event;
+        }
         mask(keyRing->keyMask, (int)keyCode);
         checkHotkeys(keyRing);
     } else if (type == kCGEventKeyUp) {
